@@ -27,21 +27,17 @@ app.use(
 app.use('/api', require('./routes/index'))
 
 const host = process.env.API_HOST
-const port = process.env.API_PORT
+const port = process.env.API_HTTPS_PORT
 
 // Listen the server
 // app.listen(port, host)
-https
-  .createServer(
-    {
-      key: fs.readFileSync(path.resolve(__dirname, '../server.key')),
-      cert: fs.readFileSync(path.resolve(__dirname, '../server.crt'))
-    },
-    app
-  )
-  .listen(port, host, function() {
-    consola.ready({
-      message: `Server listening on https://${host}:${port}`,
-      badge: true
-    })
+const privateKey = fs.readFileSync(path.resolve(__dirname, '../server.key'))
+const certificate = fs.readFileSync(path.resolve(__dirname, '../server.crt'))
+const credentials = { key: privateKey, cert: certificate }
+const httpsServer = https.createServer(credentials, app)
+httpsServer.listen(port, host, function() {
+  consola.ready({
+    message: `Server listening on https://${host}:${port}`,
+    badge: true
   })
+})

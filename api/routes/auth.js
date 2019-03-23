@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const authenticate = require('../middleware/authenticate')
 const router = express.Router()
 
-router.post('/token', function(req, res, next) {
+router.post('/login', function(req, res, next) {
   passport.authenticate('local', { session: false }, (err, userId) => {
     if (err) {
       return res.status(400).json({
@@ -14,10 +14,8 @@ router.post('/token', function(req, res, next) {
       })
     }
     req.login(userId, { session: false }, err => {
-      if (err) {
-        res.send(err)
-        return
-      }
+      if (err) return res.send(err)
+
       // generate a signed-on web token with the contents of user object and return it in the response
       const authExpiresInMsec = parseInt(process.env.AUTH_EXPIRES_IN_MSEC)
       const token = jwt.sign({ userId }, process.env.AUTH_SECRET, {
@@ -31,15 +29,21 @@ router.post('/token', function(req, res, next) {
   })(req, res)
 })
 
+router.post('/logout', function(req, res) {
+  res.json({ status: 'OK' })
+})
+
 router.get('/me', authenticate, function(req, res) {
   res.json({
-    name: 'Riko Nagatama'
+    user: 'id1'
   })
 })
 
 router.post('/test', authenticate, function(req, res) {
-  res.json({
-    foo: 'bar'
+  res.status(401).json({
+    error: {
+      message: 'hehe ga boleh'
+    }
   })
 })
 

@@ -4,7 +4,7 @@
       Fetch Profile
     </v-btn>
     <v-btn @click="test">
-      Test
+      401 Unauthorized Response
     </v-btn>
     <v-btn @click="logout">
       Logout
@@ -25,8 +25,7 @@ export default {
       this.$axios.post('/api/auth/test')
     },
     logout() {
-      this.$store.dispatch('auth/logout')
-      this.$router.push('/')
+      this.$auth.logout()
     }
   }
 }

@@ -64,13 +64,15 @@ export default {
       this.errorMessage = null
       if (this.valid) {
         try {
-          await this.$store.dispatch('auth/login', {
-            username: this.username,
-            password: this.password
+          await this.$auth.loginWith('local', {
+            data: {
+              username: this.username,
+              password: this.password
+            }
           })
           this.$router.push('/dashboard')
         } catch (e) {
-          if (e.response.data && e.response.data.error) {
+          if (e.response && e.response.data && e.response.data.error) {
             this.errorMessage = e.response.data.error.message
           } else {
             this.errorMessage = e.message

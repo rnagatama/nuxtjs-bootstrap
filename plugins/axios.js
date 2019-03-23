@@ -1,8 +1,8 @@
 // import cookie from 'cookie'
 
-export default function({ $axios, store, redirect }) {
-  $axios.defaults.xsrfCookieName = 'csrf_token'
-  $axios.defaults.xsrfHeaderName = 'x-csrf-token'
+export default function({ $axios, app, store, redirect }) {
+  // $axios.defaults.xsrfCookieName = 'csrf_token'
+  // $axios.defaults.xsrfHeaderName = 'x-csrf-token'
   // $axios.onRequest(config => {
   //   console.log(config.headers)
   //   if (process.client && document) {
@@ -10,11 +10,11 @@ export default function({ $axios, store, redirect }) {
   //     config.headers.common['x-csrf-token'] = cookies.csrf_token
   //   }
   // })
+
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status)
     if (code === 401) {
-      store.dispatch('auth/logout')
-      redirect('/')
+      app.$auth.logout()
     }
   })
 }
