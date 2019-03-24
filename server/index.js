@@ -8,9 +8,13 @@ const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
+const dotenvConfig = require('dotenv').config()
+const dotenvExpand = require('dotenv-expand')
+dotenvExpand(dotenvConfig)
+
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
-config.dev = !(process.env.NODE_ENV === 'production')
+const isProduction = process.env.NODE_ENV === 'production'
 
 // express middleware
 app.use(cookieParser())
@@ -24,7 +28,7 @@ async function start() {
   const httpsPort = process.env.SERVER_HTTPS_PORT
 
   // Build only in dev mode
-  if (config.dev) {
+  if (!isProduction) {
     const builder = new Builder(nuxt)
     await builder.build()
   } else {

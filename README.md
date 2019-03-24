@@ -1,6 +1,6 @@
-# online-shop-vue
+# nuxtjs-bootstrap
 
-> My glorious Nuxt.js project
+> My Nuxt.js bootstrap project
 
 ## Build Setup
 
@@ -8,8 +8,11 @@
 # install dependencies
 $ npm install
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+# serve API with watch at localhost:<api-port>
+$ npm run dev-api
+
+# serve with hot reload at localhost:<web-port>
+$ npm run dev-web
 
 # build for production and launch server
 $ npm run build

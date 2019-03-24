@@ -1,14 +1,8 @@
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
-const dotenvConfig = require('dotenv').config()
-const dotenvExpand = require('dotenv-expand')
-dotenvExpand(dotenvConfig)
 const pkg = require('./package')
-const csfrHttpMethods = ['POST', 'PUT', 'DELETE']
 
 module.exports = {
   mode: 'universal',
-
-  csfrHttpMethods: csfrHttpMethods,
 
   /*
   ** Headers of the page
@@ -51,8 +45,6 @@ module.exports = {
   modules: [
     '@nuxtjs/auth',
     '@nuxtjs/axios', // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/dotenv',
-    // '@nuxtjs/proxy',
     '@nuxtjs/pwa'
   ],
 
@@ -62,7 +54,7 @@ module.exports = {
       options: {
         path: '/',
         expires: process.env.AUTH_EXPIRES_IN_MSEC / 1000 / 60 / 60 / 24, // in day
-        sameSite: 'strict',
+        sameSite: 'lax',
         secure: true
       }
     },
@@ -112,7 +104,7 @@ module.exports = {
   proxy: {
     '/api': {
       target: process.env.API_BASE_URL,
-      secure: false // TODO: set to true for production?
+      secure: process.env.SERVER_SECURE_PROXY === '1'
     }
   },
 
